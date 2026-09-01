@@ -9,6 +9,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { HwpxDocument, ImagePositionOptions } from './HwpxDocument';
 import { HangingIndentCalculator } from './HangingIndentCalculator';
+import { applyGovStylePrefix } from './GovStyleIndent';
 
 // Version marker for debugging
 const MCP_VERSION = 'v2-fixed-xml-replacement';
@@ -220,6 +221,20 @@ Example: get_tool_guide({ workflow: "template" })`,
         after_index: { type: 'number', description: 'Insert after this paragraph index (-1 for beginning)' },
         text: { type: 'string', description: 'Paragraph text' },
         auto_hanging_indent: { type: 'boolean', description: 'Automatically apply hanging indent if marker detected (default: true)' },
+      },
+      required: ['doc_id', 'section_index', 'after_index', 'text'],
+    },
+  },
+  {
+    name: 'insert_paragraph_gov_style',
+    description: 'Insert a paragraph using [REDACTED] government-document 개조식 hierarchy rules (□/○·ㅇ/-/※/①②③), calibrated against Desktop\\[REDACTED_TEMPLATE]\\[REDACTED_DOC] 서식.hwpx. Prepends the standard leading-space count for the detected marker (□=0, ○/ㅇ=1, -=3, ※=5, ①..=1) and, for ※ and circled-number markers, applies the standard hanging-indent (firstLineIndent) values from that file instead of the generic auto_hanging_indent heuristic. Text must start with the marker character with no pre-existing leading spaces.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        doc_id: { type: 'string', description: 'Document ID' },
+        section_index: { type: 'number', description: 'Section index' },
+        after_index: { type: 'number', description: 'Insert after this paragraph index (-1 for beginning)' },
+        text: { type: 'string', description: 'Paragraph text, starting with □, ○/ㅇ, -, ※, or a circled number (①②③...) with no leading spaces' },
       },
       required: ['doc_id', 'section_index', 'after_index', 'text'],
     },
@@ -2549,6 +2564,32 @@ Call get_tool_guide with: template, table, image, search, read, create`
           return success({ message: `Paragraph inserted with hanging indent: ${indentPt.toFixed(2)}pt`, index, indent_pt: indentPt });
         }
         return success({ message: 'Paragraph inserted', index });
+      }
+
+      case 'insert_paragraph_gov_style': {
+        const doc = getDoc(args?.doc_id as string);
+        if (!doc) return error('Document not found');
+        if (doc.format === 'hwp') return error('HWP files are read-only');
+
+        const sectionIndex = args?.section_index as number;
+        const rawText = args?.text as string;
+        if (!rawText) return error('text is required');
+
+        const gov = applyGovStylePrefix(rawText);
+
+        const index = doc.insertParagraph(sectionIndex, args?.after_index as number, gov.text);
+        if (index === -1) return error('Failed to insert paragraph');
+
+        if (gov.style) {
+          doc.applyParagraphStyle(sectionIndex, index, gov.style);
+        }
+
+        return success({
+          message: 'Paragraph inserted with gov-style indent',
+          index,
+          level: gov.level,
+          style: gov.style ?? null,
+        });
       }
 
       case 'delete_paragraph': {
