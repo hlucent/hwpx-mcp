@@ -9,6 +9,18 @@ AI 도구(Claude 등)와 연동하여 한글(HWPX) 문서를 자동으로 편집
 
 ---
 
+## 📌 이 저장소에 대해 (Personal Fork)
+
+이 저장소는 [Dayoooun/hwpx-mcp](https://github.com/Dayoooun/hwpx-mcp)를 개인적으로 포크하여
+유지보수하는 버전입니다. 원본 프로젝트를 기반으로 다음 항목을 추가/수정했습니다.
+
+- 🔒 **보안 패치**: `output_path`가 워크스페이스 루트를 벗어나지 못하도록 검증 추가 (CWE-73, path traversal 방지)
+- 📐 **서식 로직 개선**: [REDACTED] 표준 서식 기준에 맞춘 공백 기반 문단 위계(들여쓰기) 처리 도구(`insert_paragraph_gov_style`) 추가
+
+원본 프로젝트 라이선스(MIT)를 그대로 유지하며, 원저작자 고지(Credits)를 아래에 명시합니다.
+
+---
+
 ## 🌍 Cross-Platform Support
 
 **모든 운영체제에서 작동합니다!**
@@ -505,7 +517,8 @@ await mcp.replace_text_in_cell({
 ## 🙏 Credits
 
 - Original Project: [mjyoo2/hwp-extension](https://github.com/mjyoo2/hwp-extension)
-- Enhanced by: [Dayoooun](https://github.com/Dayoooun)
+- Enhanced by: [Dayoooun](https://github.com/Dayoooun) — [Dayoooun/hwpx-mcp](https://github.com/Dayoooun/hwpx-mcp)
+- Personal fork maintained by the repository owner (security patch + gov-style paragraph indent)
 
 ---
 
