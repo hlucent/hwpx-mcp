@@ -82,7 +82,7 @@ AI 도구(Claude 등)와 연동하여 한글(HWPX) 문서를 자동으로 편집
 ### 1. MCP 서버 설치
 
 ```bash
-git clone https://github.com/Dayoooun/hwpx-mcp.git
+git clone https://github.com/hlucent/hwpx-mcp.git
 cd hwpx-mcp/mcp-server
 npm install
 npm run build
@@ -530,4 +530,5 @@ MIT
 
 ## 🤝 Contributing
 
-버그 리포트 및 기능 요청: [GitHub Issues](https://github.com/Dayoooun/hwpx-mcp/issues)
+- 이 포크(개인 유지보수 버전) 관련 버그/요청: [hlucent/hwpx-mcp Issues](https://github.com/hlucent/hwpx-mcp/issues)
+- 원본 프로젝트 관련: [Dayoooun/hwpx-mcp Issues](https://github.com/Dayoooun/hwpx-mcp/issues)
