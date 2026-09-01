@@ -63,7 +63,7 @@ npm run build
       "command": "npx",
       "args": ["-y", "@kimdayoun/hwpx-mcp"],
       "env": {
-        "HWPX_MCP_WORKSPACE_ROOT": "C:/Users/USER/Documents/hwpx-workspace"
+        "HWPX_MCP_WORKSPACE_ROOT": "C:/Users/username/Documents/hwpx-workspace"
       }
     }
   }
@@ -82,7 +82,7 @@ npm run build
       "command": "npx",
       "args": ["-y", "@kimdayoun/hwpx-mcp"],
       "env": {
-        "HWPX_MCP_WORKSPACE_ROOT": "C:/Users/USER/Documents/hwpx-workspace"
+        "HWPX_MCP_WORKSPACE_ROOT": "C:/Users/username/Documents/hwpx-workspace"
       }
     }
   }

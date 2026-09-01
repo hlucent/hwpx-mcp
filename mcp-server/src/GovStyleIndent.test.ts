@@ -1,6 +1,6 @@
 /**
  * Tests for applyGovStylePrefix, calibrated against the paragraph styles
- * observed in Desktop\[REDACTED_TEMPLATE]\[REDACTED_DOC] 서식.hwpx (both the
+ * observed in a standard government report template document (both the
  * 서식 정의부 and <작성 예시> 실제 작성부, which were confirmed identical).
  */
 import { describe, it, expect } from 'vitest';

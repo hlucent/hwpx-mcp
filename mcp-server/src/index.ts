@@ -228,7 +228,7 @@ Example: get_tool_guide({ workflow: "template" })`,
   },
   {
     name: 'insert_paragraph_gov_style',
-    description: 'Insert a paragraph using [REDACTED] government-document 개조식 hierarchy rules (□/○·ㅇ/-/※/①②③), calibrated against Desktop\\[REDACTED_TEMPLATE]\\[REDACTED_DOC] 서식.hwpx. Prepends the standard leading-space count for the detected marker (□=0, ○/ㅇ=1, -=3, ※=5, ①..=1) and, for ※ and circled-number markers, applies the standard hanging-indent (firstLineIndent) values from that file instead of the generic auto_hanging_indent heuristic. Text must start with the marker character with no pre-existing leading spaces.',
+    description: 'Insert a paragraph using Korean government-document 개조식 hierarchy rules (□/○·ㅇ/-/※/①②③), calibrated against a standard government report template. Prepends the standard leading-space count for the detected marker (□=0, ○/ㅇ=1, -=3, ※=5, ①..=1) and, for ※ and circled-number markers, applies the standard hanging-indent (firstLineIndent) values from that template instead of the generic auto_hanging_indent heuristic. Text must start with the marker character with no pre-existing leading spaces.',
     inputSchema: {
       type: 'object',
       properties: {
