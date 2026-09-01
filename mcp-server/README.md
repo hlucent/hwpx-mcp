@@ -41,6 +41,17 @@ npm run build
 
 ## 설정
 
+### 워크스페이스 루트 설정 (보안, 권장)
+
+이 서버가 읽고 쓸 수 있는 파일 경로는 `HWPX_MCP_WORKSPACE_ROOT` 환경변수로
+지정한 디렉토리 하위로 제한됩니다. `open_document`, `save_document`,
+`export_to_text`, `export_to_html`, `insert_image`, `insert_image_in_cell`
+호출 시 이 경로를 벗어나는 절대경로·`../` 상위 디렉토리 탈출·심볼릭 링크
+우회 시도는 모두 거부됩니다 (CWE-73 대응, [Issue #3](https://github.com/Dayoooun/hwpx-mcp/issues/3)).
+
+설정하지 않으면 서버의 현재 작업 디렉토리(`process.cwd()`)로 자동 설정되며,
+경고 로그가 출력됩니다. 운영 환경에서는 아래처럼 명시적으로 지정하세요.
+
 ### Claude Code (.vscode/mcp.json)
 
 프로젝트 루트에 `.vscode/mcp.json` 파일 생성:
@@ -50,7 +61,10 @@ npm run build
   "mcpServers": {
     "hwpx-mcp": {
       "command": "npx",
-      "args": ["-y", "@kimdayoun/hwpx-mcp"]
+      "args": ["-y", "@kimdayoun/hwpx-mcp"],
+      "env": {
+        "HWPX_MCP_WORKSPACE_ROOT": "C:/Users/USER/Documents/hwpx-workspace"
+      }
     }
   }
 }
@@ -66,7 +80,10 @@ npm run build
   "mcpServers": {
     "hwpx-mcp": {
       "command": "npx",
-      "args": ["-y", "@kimdayoun/hwpx-mcp"]
+      "args": ["-y", "@kimdayoun/hwpx-mcp"],
+      "env": {
+        "HWPX_MCP_WORKSPACE_ROOT": "C:/Users/USER/Documents/hwpx-workspace"
+      }
     }
   }
 }

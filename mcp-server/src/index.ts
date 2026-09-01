@@ -9,6 +9,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { HwpxDocument, ImagePositionOptions } from './HwpxDocument';
 import { HangingIndentCalculator } from './HangingIndentCalculator';
+import { resolveSafePath } from './PathGuard';
 
 // Version marker for debugging
 const MCP_VERSION = 'v2-fixed-xml-replacement';
@@ -2322,7 +2323,7 @@ Call get_tool_guide with: template, table, image, search, read, create`
         const filePath = args?.file_path as string;
         if (!filePath) return error('file_path is required');
 
-        const absolutePath = path.resolve(filePath);
+        const absolutePath = resolveSafePath(filePath, { mustExist: true });
         const data = fs.readFileSync(absolutePath);
         const docId = generateId();
 
@@ -2354,7 +2355,7 @@ Call get_tool_guide with: template, table, image, search, read, create`
 
         // Use document lock to ensure all pending updates complete before save
         return await withDocumentLock(docId, async () => {
-          const savePath = (args?.output_path as string) || doc.path;
+          const savePath = resolveSafePath((args?.output_path as string) || doc.path);
           const createBackup = args?.create_backup !== false; // default: true
           const verifyIntegrity = args?.verify_integrity !== false; // default: true
           let backupPath: string | null = null;
@@ -3446,7 +3447,7 @@ Call get_tool_guide with: template, table, image, search, read, create`
         if (!doc) return error('Document not found');
 
         const text = doc.getAllText();
-        const outputPath = args?.output_path as string;
+        const outputPath = resolveSafePath(args?.output_path as string);
         fs.writeFileSync(outputPath, text, 'utf-8');
         return success({ message: `Exported to ${outputPath}`, characters: text.length });
       }
@@ -3482,7 +3483,7 @@ Call get_tool_guide with: template, table, image, search, read, create`
         }
 
         html += '</body></html>';
-        const outputPath = args?.output_path as string;
+        const outputPath = resolveSafePath(args?.output_path as string);
         fs.writeFileSync(outputPath, html, 'utf-8');
         return success({ message: `Exported to ${outputPath}` });
       }
@@ -3701,8 +3702,7 @@ Call get_tool_guide with: template, table, image, search, read, create`
         if (!doc) return error('Document not found');
         if (doc.format === 'hwp') return error('HWP files are read-only');
 
-        const imagePath = args?.image_path as string;
-        if (!fs.existsSync(imagePath)) return error('Image file not found');
+        const imagePath = resolveSafePath(args?.image_path as string, { mustExist: true });
 
         // Resolve position using after_table, after_header, or direct indices
         let sectionIndex = args?.section_index as number | undefined;
@@ -3916,8 +3916,7 @@ Call get_tool_guide with: template, table, image, search, read, create`
         if (!doc) return error('Document not found');
         if (doc.format === 'hwp') return error('HWP files are read-only');
 
-        const imagePath = args?.image_path as string;
-        if (!fs.existsSync(imagePath)) return error('Image file not found');
+        const imagePath = resolveSafePath(args?.image_path as string, { mustExist: true });
 
         const globalTblIdx = args?.table_index as number;
         const rowIdx = args?.row as number;
